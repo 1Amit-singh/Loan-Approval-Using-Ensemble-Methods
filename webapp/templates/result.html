@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Prediction Result</title>
+		<style>
+			/* General Styles */
+			body {
+				font-family: "Arial", sans-serif;
+				background-color: #f7f8fc;
+				margin: 0;
+				padding: 20px;
+				color: #333;
+				display: flex;
+				flex-direction: column;
+				align-items: center;
+				justify-content: center;
+				min-height: 100vh;
+			}
+
+			/* Title and Headings */
+			h1 {
+				font-size: 2rem;
+				color: #4e79a7;
+				margin-bottom: 20px;
+			}
+
+			h2 {
+				font-size: 1.5rem;
+				color: #333;
+				margin-top: 30px;
+				margin-bottom: 15px;
+			}
+
+			/* Paragraph */
+			p {
+				font-size: 1.1rem;
+				background-color: #fff;
+				padding: 15px 20px;
+				border-radius: 8px;
+				box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+			}
+
+			/* Canvas Container */
+			canvas {
+				margin: 20px 0;
+				background-color: #fff;
+				border-radius: 8px;
+				box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+				padding: 15px;
+			}
+
+			/* Go Back Link */
+			a {
+				display: inline-block;
+				margin-top: 20px;
+				font-size: 1rem;
+				font-weight: bold;
+				color: #fff;
+				background-color: #4e79a7;
+				text-decoration: none;
+				padding: 10px 20px;
+				border-radius: 6px;
+				transition: background-color 0.3s ease;
+			}
+
+			a:hover {
+				background-color: #375a7f;
+			}
+
+			a:focus {
+				outline: none;
+			}
+		</style>
+	</head>
+	<body>
+		<h1>Loan Approval Prediction Result</h1>
+		<p><strong>Prediction:</strong> {{ prediction }}</p>
+
+		<h2>Confidence Scores</h2>
+
+		<canvas id="myChart" style="width: 100%; max-width: 700px"></canvas>
+
+		<a href="/">Go Back</a>
+
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
+		<script>
+			const scores = {{ scores | tojson }};
+			const labels = Object.keys(scores);
+			const data = Object.values(scores);
+
+			// var xValues = ["Italy", "France", "Spain", "USA", "Argentina"];
+			// var yValues = [55, 49, 44, 24, 15];
+			const barColors = ["#4e79a7", "#f28e2b", "#e15759", "#76b7b2", "#59a14f", "#edc948", "#af7aa1", "#ff9da7", "#9c755f"];
+
+			new Chart("myChart", {
+				type: "bar",
+				data: {
+					labels: labels,
+					datasets: [
+						{
+							backgroundColor: barColors,
+							data: data,
+						},
+					],
+				},
+				options: {
+					legend: { display: false },
+					title: {
+						display: true,
+						text: "F1 Scores of the Model",
+					},
+				},
+			});
+		</script>
+	</body>
+</html>
